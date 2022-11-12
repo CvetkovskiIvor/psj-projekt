@@ -1,1 +1,1 @@
-# psj-projekt
+Programiranje: skriptni jezici - projekt
