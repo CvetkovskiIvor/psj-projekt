@@ -1,7 +1,7 @@
 # Programiranje: skriptni jezici - projekt
 ## Algoritmi za analizu
 David 
- - RandomForestRegresor
+ - RandomForestRegressor
 
 Entoni
  - SVR
