@@ -74,7 +74,7 @@ plt.show()
 
 # Test data
 print("---------------------------------------------------")
-ForestReg.fit(X_test,y_test)
+#ForestReg.fit(X_test,y_test)
 test_predicted = ForestReg.predict(X_test)
 print("Accuracy of Random Forrest algorithm for test Data ", ForestReg.score(X_train,y_train))
 print('R^2 Test:',metrics.r2_score(y_test, test_predicted))
@@ -86,4 +86,44 @@ plt.scatter(y_test, test_predicted)
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.title("Test data: MEDV vs Predicted MEDV")
+plt.show()
+
+#Linear regression
+from sklearn.linear_model import LinearRegression
+
+LinearReg = LinearRegression()
+
+LinearReg.fit(X_train,y_train)
+
+lmTrainPredict = LinearReg.predict(X_train)
+
+print("-----------------------------------------------------------------")
+print("Accuracy of Linear regression algorithm for train Data ", LinearReg.score(X_train,y_train))
+print('Linear Regression train R^2:',metrics.r2_score(y_train, lmTrainPredict))
+print('Linear Regression train MAE:',metrics.mean_absolute_error(y_train, lmTrainPredict))
+print('Linear Regression train MSE:',metrics.mean_squared_error(y_train, lmTrainPredict))
+print('Linear Regression train RMSE:',np.sqrt(metrics.mean_squared_error(y_train, lmTrainPredict)))
+
+
+plt.scatter(y_train, lmTrainPredict)
+plt.xlabel("MEDV")
+plt.ylabel("Predicted MEDV")
+plt.title("Linear Regression Train data: MEDV vs Predicted MEDV")
+plt.show()
+
+#Test data
+lmTestPredict = LinearReg.predict(X_test)
+
+print("----------------------------------------------------------------------------")
+print("Accuracy of Linear regression algorithm for test Data ", LinearReg.score(X_test,y_test))
+print('Linear Regression test R^2:', metrics.r2_score(y_test, lmTestPredict))
+print('Linear Regression test MAE:',metrics.mean_absolute_error(y_test, lmTestPredict))
+print('Linear Regression test MSE:',metrics.mean_squared_error(y_test, lmTestPredict))
+print('Linear Regression test RMSE:',np.sqrt(metrics.mean_squared_error(y_test, lmTestPredict)))
+
+
+plt.scatter(y_test, lmTestPredict)
+plt.xlabel("MEDV")
+plt.ylabel("Predicted MEDV")
+plt.title("Linear Regression Test data: MEDV vs Predicted MEDV")
 plt.show()
