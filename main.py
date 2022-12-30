@@ -8,7 +8,7 @@ from pandas import read_csv
 column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
 
 data = read_csv(
-    'C:\\Users\\User\\Documents\\Fakultet\\Programiranje skriptni jezici\\psj-projekt\\Dataset\\housing.csv',
+    '/home/ivor/Downloads/housing.xls',
     header=None, delimiter=r"\s+", names=column_names)
 
 # Provjera da li postoje redovi bez vrijednosti
