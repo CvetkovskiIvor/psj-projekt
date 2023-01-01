@@ -1,6 +1,5 @@
 from xgboost import XGBRegressor
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -26,9 +25,11 @@ min_max_scaler = preprocessing.MinMaxScaler()
 column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX']
 X = data.loc[:,column_corr]
 X = min_max_scaler.fit_transform(X)
-#X = data.drop(['MEDV'], axis=1)
+#X = data.drop(['PRICE'], axis=1)
 # Tražena varijabla/stupac
 y = data['MEDV']
+#y = data.loc[:, column_corr]
+#y = min_max_scaler.fit_transform(y)
 
 # Podjela dataset-a na dva dijela. Jedan za trening, a jedan za testiranje
 # Veličina dataset-a za test je 30% orginalne veličine testa
@@ -43,8 +44,10 @@ reg = XGBRegressor()
 
 reg.fit(X_train, y_train)
 
+# Model prediction on train data
 y_pred = reg.predict(X_train)
 
+# Model evaluation
 print('R^2:',metrics.r2_score(y_train, y_pred))
 print('Adjusted R^2:',1 - (1-metrics.r2_score(y_train, y_pred))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
 print('MAE:',metrics.mean_absolute_error(y_train, y_pred))
@@ -52,18 +55,18 @@ print('MSE:',metrics.mean_squared_error(y_train, y_pred))
 print('RMSE:',np.sqrt(metrics.mean_squared_error(y_train, y_pred)))
 
 plt.scatter(y_train, y_pred)
-plt.title("XGB Prices vs Predicted prices")
-plt.xlabel("Prices")
-plt.ylabel("Predicted prices")
-plt.show()
-
-plt.scatter(y_pred,y_train-y_pred)
-plt.title("XGB Predicted vs residuals")
-plt.xlabel("Predicted")
-plt.ylabel("Residuals")
+plt.title("XGB training data: MEDV vs Predicted MEDV")
+plt.xlabel("MEDV")
+plt.ylabel("Predicted MEDV")
 plt.show()
 
 y_test_pred = reg.predict(X_test)
+
+plt.scatter(y_test, y_test_pred)
+plt.title("XGB test data: MEDV vs Predicted MEDV")
+plt.xlabel("MEDV")
+plt.ylabel("Predicted MEDV")
+plt.show()
 
 acc_xgb = metrics.r2_score(y_test, y_test_pred)
 print('R^2:', acc_xgb)
