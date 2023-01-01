@@ -1,4 +1,4 @@
-from xgboost import XGBRegressor
+import xgboost as xgb
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -6,6 +6,8 @@ import seaborn as sns
 from pandas import read_csv
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import cross_val_score, KFold
 from sklearn import preprocessing
 
 column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
@@ -19,33 +21,41 @@ print(data.isnull().sum())
 
 print(data.describe())
 
-#Skalira  vrijednosti u jedan jedinstveni range
-min_max_scaler = preprocessing.MinMaxScaler()
 #Odabrani su stupci koji imaju najveću korelaciju sa traženim stupcom
 column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX']
+
+#Skalira  vrijednosti u jedan jedinstveni range
+#min_max_scaler = preprocessing.MinMaxScaler()
+
 X = data.loc[:,column_corr]
-X = min_max_scaler.fit_transform(X)
-#X = data.drop(['PRICE'], axis=1)
 # Tražena varijabla/stupac
-y = data['MEDV']
-#y = data.loc[:, column_corr]
-#y = min_max_scaler.fit_transform(y)
+y = data.iloc[:,-1]
 
 # Podjela dataset-a na dva dijela. Jedan za trening, a jedan za testiranje
-# Veličina dataset-a za test je 30% orginalne veličine testa
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=25)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-print("Shape of X_train: ",X_train.shape)
-print("Shape of X_test: ", X_test.shape)
-print("Shape of y_train: ",y_train.shape)
-print("Shape of y_test",y_test.shape)
 
-reg = XGBRegressor()
+xg_reg = xgb.XGBRegressor(objective="reg:squarederror",
+                          learning_rate=0.1,
+                          n_estimators=1000,
+                          colsample_bytree=0.3,
+                          max_depth=4,
+                          alpha=10,
+                          random_state=42)
 
-reg.fit(X_train, y_train)
+print(xg_reg)
+
+xg_reg.fit(X_train, y_train)
+
+xg_score = xg_reg.score(X_train, y_train)
+
+print("Training score: ", xg_score)
+
+scores = cross_val_score(xg_reg, X_train, y_train,cv=10)
+print("Mean cross-validation score: %.2f" % scores.mean())
 
 # Model prediction on train data
-y_pred = reg.predict(X_train)
+y_pred = xg_reg.predict(X_train)
 
 # Model evaluation
 print('R^2:',metrics.r2_score(y_train, y_pred))
@@ -60,7 +70,17 @@ plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.show()
 
-y_test_pred = reg.predict(X_test)
+plt.scatter(y_pred,y_train-y_pred)
+plt.title("Predicted vs residuals")
+plt.xlabel("Predicted")
+plt.ylabel("Residuals")
+plt.show()
+
+y_test_pred = xg_reg.predict(X_test)
+
+print("------------------")
+rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
+rmse
 
 plt.scatter(y_test, y_test_pred)
 plt.title("XGB test data: MEDV vs Predicted MEDV")
