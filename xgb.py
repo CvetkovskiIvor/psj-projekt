@@ -1,14 +1,12 @@
 import xgboost as xgb
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 from pandas import read_csv
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import cross_val_score, KFold
-from sklearn import preprocessing
+from sklearn.model_selection import cross_val_score
 
 column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
 
@@ -22,7 +20,7 @@ print(data.isnull().sum())
 print(data.describe())
 
 #Odabrani su stupci koji imaju najveću korelaciju sa traženim stupcom
-column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX']
+column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX', 'AGE', 'DIS']
 
 #Skalira  vrijednosti u jedan jedinstveni range
 #min_max_scaler = preprocessing.MinMaxScaler()
@@ -32,20 +30,22 @@ X = data.loc[:,column_corr]
 y = data.iloc[:,-1]
 
 # Podjela dataset-a na dva dijela. Jedan za trening, a jedan za testiranje
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
 
 xg_reg = xgb.XGBRegressor(objective="reg:squarederror",
                           learning_rate=0.1,
-                          n_estimators=1000,
+                          n_estimators=310,
                           colsample_bytree=0.3,
                           max_depth=4,
-                          alpha=10,
+                          alpha=6,
                           random_state=42)
 
 print(xg_reg)
 
 xg_reg.fit(X_train, y_train)
+
+
 
 xg_score = xg_reg.score(X_train, y_train)
 
@@ -94,3 +94,21 @@ print('Adjusted R^2:',1 - (1-metrics.r2_score(y_test, y_test_pred))*(len(y_test)
 print('MAE:',metrics.mean_absolute_error(y_test, y_test_pred))
 print('MSE:',metrics.mean_squared_error(y_test, y_test_pred))
 print('RMSE:',np.sqrt(metrics.mean_squared_error(y_test, y_test_pred)))
+
+print("!!!!!!!!!!!!!!!!!!!!!")
+xg_reg.fit(X_train, y_train, eval_set=[(X_train, y_train),(X_test, y_test)], early_stopping_rounds=20)
+results = xg_reg.evals_result()
+results.keys()
+
+plt.figure(figsize=(10,7))
+plt.plot(results['validation_0']['rmse'], label="Training loss")
+plt.plot(results['validation_1']['rmse'], label="Validation loss")
+plt.axvline(x=xg_reg.best_ntree_limit, ymin=0, ymax=14, color='gray',
+            label="Optimal tree number")
+plt.xlabel("Number of Tree")
+plt.ylabel("Loss")
+plt.legend(loc='upper right')
+plt.show()
+
+#xg_reg.predict(X_test, iteration_range=310)
+
