@@ -28,10 +28,10 @@ from sklearn import preprocessing
 #Skalira  vrijednosti u jedan jedinstveni range
 min_max_scaler = preprocessing.MinMaxScaler()
 #Odabrani su stupci koji imaju najveću korelaciju sa traženim stupcom
-column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX']
+column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX','AGE','DIS']
+#X = data.drop(['MEDV'], axis=1)
 X = data.loc[:,column_corr]
 X = min_max_scaler.fit_transform(X)
-#X = data.drop(['MEDV'], axis=1)
 # Tražena varijabla/stupac
 y = data['MEDV']
 
@@ -46,8 +46,25 @@ print("Shape of y_test",y_test.shape)
 
 # Random Forest Regressor
 from sklearn.ensemble import RandomForestRegressor
-ForestReg = RandomForestRegressor()
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import cross_val_score
 
+
+n_estimators = [int(x) for x in np.arange(start = 10, stop = 2000, step = 10)]
+max_features = [0.5,'auto', 'sqrt','log2']
+min_samples_leaf = [1, 2, 4]
+bootstrap = [True, False]
+random_grid = {'n_estimators': n_estimators,
+               'max_features': max_features,
+               'min_samples_leaf': min_samples_leaf,
+               'bootstrap': bootstrap}
+
+#ForestReg =RandomForestRegressor(n_estimators=500, min_samples_leaf=1, max_features=0.5,bootstrap=False)
+ForestReg = RandomForestRegressor(n_estimators=470,min_samples_leaf=1,max_features='sqrt',bootstrap=False)
+ForestReg_random = RandomizedSearchCV(estimator = ForestReg, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
+
+ForestReg_random.fit(X_train,y_train)
+print(ForestReg_random.best_params_)
 # Training data
 ForestReg.fit(X_train, y_train)
 train_predicted = ForestReg.predict(X_train)
@@ -57,6 +74,7 @@ print("Accuracy of Random Forrest algorithm ", ForestReg.score(X_train,y_train))
 # Računa koliko varijacije u dobivenom rezultatu se može predvidjeti na temelju ulazne varijable
 # Što je broj bliže 1 to je algoritam točniji
 print('R^2:',metrics.r2_score(y_train, train_predicted))
+print('Adjusted R^2:',1 - (1-metrics.r2_score(y_train, train_predicted))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
 # Prosjek kvadrata razlike između dobivenih vrijednosti i stvarnih vrijednosti
 print('MAE:',metrics.mean_absolute_error(y_train, train_predicted))
 # Što je manji MSE to je greška manja
@@ -68,7 +86,7 @@ print('RMSE:',np.sqrt(metrics.mean_squared_error(y_train, train_predicted)))
 plt.scatter(y_train, train_predicted)
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
-plt.title("Training data: MEDV vs Predicted MEDV")
+plt.title("Random Forrest Training data: MEDV vs Predicted MEDV")
 plt.show()
 
 
@@ -78,6 +96,7 @@ print("---------------------------------------------------")
 test_predicted = ForestReg.predict(X_test)
 print("Accuracy of Random Forrest algorithm for test Data ", ForestReg.score(X_train,y_train))
 print('R^2 Test:',metrics.r2_score(y_test, test_predicted))
+print('Adjusted R^2:',1 - (1-metrics.r2_score(y_train, test_predicted))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
 print('MAE Test:',metrics.mean_absolute_error(y_test, test_predicted))
 print('MSE Test:',metrics.mean_squared_error(y_test, test_predicted))
 print('RMSE Test:',np.sqrt(metrics.mean_squared_error(y_test, test_predicted)))
@@ -85,7 +104,7 @@ print('RMSE Test:',np.sqrt(metrics.mean_squared_error(y_test, test_predicted)))
 plt.scatter(y_test, test_predicted)
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
-plt.title("Test data: MEDV vs Predicted MEDV")
+plt.title("Random Forrest Test data: MEDV vs Predicted MEDV")
 plt.show()
 
 #Linear regression
@@ -100,6 +119,7 @@ lmTrainPredict = LinearReg.predict(X_train)
 print("-----------------------------------------------------------------")
 print("Accuracy of Linear regression algorithm for train Data ", LinearReg.score(X_train,y_train))
 print('Linear Regression train R^2:',metrics.r2_score(y_train, lmTrainPredict))
+print('Linear Regression train Adjusted R^2:',1 - (1-metrics.r2_score(y_train, lmTrainPredict))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
 print('Linear Regression train MAE:',metrics.mean_absolute_error(y_train, lmTrainPredict))
 print('Linear Regression train MSE:',metrics.mean_squared_error(y_train, lmTrainPredict))
 print('Linear Regression train RMSE:',np.sqrt(metrics.mean_squared_error(y_train, lmTrainPredict)))
@@ -117,6 +137,7 @@ lmTestPredict = LinearReg.predict(X_test)
 print("----------------------------------------------------------------------------")
 print("Accuracy of Linear regression algorithm for test Data ", LinearReg.score(X_test,y_test))
 print('Linear Regression test R^2:', metrics.r2_score(y_test, lmTestPredict))
+print('Linear Regression test Adjusted R^2:',1 - (1-metrics.r2_score(y_train, lmTestPredict))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
 print('Linear Regression test MAE:',metrics.mean_absolute_error(y_test, lmTestPredict))
 print('Linear Regression test MSE:',metrics.mean_squared_error(y_test, lmTestPredict))
 print('Linear Regression test RMSE:',np.sqrt(metrics.mean_squared_error(y_test, lmTestPredict)))
@@ -125,5 +146,5 @@ print('Linear Regression test RMSE:',np.sqrt(metrics.mean_squared_error(y_test, 
 plt.scatter(y_test, lmTestPredict)
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
-plt.title("Linear Regression Test data: MEDV vs Predicted MEDV")
+plt.title("Linear Regression TEST data: MEDV vs Predicted MEDV")
 plt.show()
