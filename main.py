@@ -60,13 +60,18 @@ random_grid = {'n_estimators': n_estimators,
                'bootstrap': bootstrap}
 
 #ForestReg =RandomForestRegressor(n_estimators=500, min_samples_leaf=1, max_features=0.5,bootstrap=False)
-ForestReg = RandomForestRegressor(n_estimators=470,min_samples_leaf=1,max_features='sqrt',bootstrap=False)
-ForestReg_random = RandomizedSearchCV(estimator = ForestReg, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
+ForestReg = RandomForestRegressor(n_estimators=470, min_samples_leaf=1, max_features='sqrt', bootstrap=False)
+#ForestReg_random = RandomizedSearchCV(estimator = ForestReg, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
 
-ForestReg_random.fit(X_train,y_train)
-print(ForestReg_random.best_params_)
+#ForestReg_random.fit(X_train,y_train)
+#print(ForestReg_random.best_params_)
 # Training data
+scores = cross_val_score(ForestReg, X_train, y_train,cv=10)
+print("Mean score of %0.2f with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 ForestReg.fit(X_train, y_train)
+
+
+
 train_predicted = ForestReg.predict(X_train)
 print("Predicted MEDV: ", train_predicted)
 # Provjera ispravnosti algoritma
@@ -96,7 +101,7 @@ print("---------------------------------------------------")
 test_predicted = ForestReg.predict(X_test)
 print("Accuracy of Random Forrest algorithm for test Data ", ForestReg.score(X_train,y_train))
 print('R^2 Test:',metrics.r2_score(y_test, test_predicted))
-print('Adjusted R^2:',1 - (1-metrics.r2_score(y_train, test_predicted))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
+print('Adjusted R^2:', 1 - (1-metrics.r2_score(y_test, test_predicted))*(len(y_test)-1)/(len(y_test)-X_test.shape[1]-1))
 print('MAE Test:',metrics.mean_absolute_error(y_test, test_predicted))
 print('MSE Test:',metrics.mean_squared_error(y_test, test_predicted))
 print('RMSE Test:',np.sqrt(metrics.mean_squared_error(y_test, test_predicted)))
@@ -106,6 +111,13 @@ plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.title("Random Forrest Test data: MEDV vs Predicted MEDV")
 plt.show()
+
+plt.scatter(test_predicted,y_test-test_predicted)
+plt.title("Random Forrest Reg Predicted vs residuals")
+plt.xlabel("Predicted")
+plt.ylabel("Residuals")
+plt.show()
+
 
 #Linear regression
 from sklearn.linear_model import LinearRegression
@@ -117,6 +129,8 @@ LinearReg.fit(X_train,y_train)
 lmTrainPredict = LinearReg.predict(X_train)
 
 print("-----------------------------------------------------------------")
+scores = cross_val_score(LinearReg, X_train, y_train,cv=10)
+print("Mean score of %0.2f with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 print("Accuracy of Linear regression algorithm for train Data ", LinearReg.score(X_train,y_train))
 print('Linear Regression train R^2:',metrics.r2_score(y_train, lmTrainPredict))
 print('Linear Regression train Adjusted R^2:',1 - (1-metrics.r2_score(y_train, lmTrainPredict))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
@@ -137,7 +151,7 @@ lmTestPredict = LinearReg.predict(X_test)
 print("----------------------------------------------------------------------------")
 print("Accuracy of Linear regression algorithm for test Data ", LinearReg.score(X_test,y_test))
 print('Linear Regression test R^2:', metrics.r2_score(y_test, lmTestPredict))
-print('Linear Regression test Adjusted R^2:',1 - (1-metrics.r2_score(y_train, lmTestPredict))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
+print('Linear Regression test Adjusted R^2:',1 - (1-metrics.r2_score(y_test, lmTestPredict))*(len(y_test)-1)/(len(y_test)-X_test.shape[1]-1))
 print('Linear Regression test MAE:',metrics.mean_absolute_error(y_test, lmTestPredict))
 print('Linear Regression test MSE:',metrics.mean_squared_error(y_test, lmTestPredict))
 print('Linear Regression test RMSE:',np.sqrt(metrics.mean_squared_error(y_test, lmTestPredict)))
@@ -147,4 +161,10 @@ plt.scatter(y_test, lmTestPredict)
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.title("Linear Regression TEST data: MEDV vs Predicted MEDV")
+plt.show()
+
+plt.scatter(lmTestPredict,y_test-lmTestPredict)
+plt.title("Predicted vs residuals")
+plt.xlabel("Predicted")
+plt.ylabel("Residuals")
 plt.show()
