@@ -25,7 +25,7 @@ plt.show()
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 from sklearn import preprocessing
-#Skalira  vrijednosti u jedan jedinstveni range
+#Skalira  vrijednost i u jedan jedinstveni range
 min_max_scaler = preprocessing.MinMaxScaler()
 #Odabrani su stupci koji imaju najveću korelaciju sa traženim stupcom
 column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX','AGE','DIS']
@@ -66,7 +66,9 @@ ForestReg = RandomForestRegressor(n_estimators=470, min_samples_leaf=1, max_feat
 #ForestReg_random.fit(X_train,y_train)
 #print(ForestReg_random.best_params_)
 # Training data
+scores_map = {}
 scores = cross_val_score(ForestReg, X_train, y_train,cv=10)
+scores_map['Random Forrest regressor'] = scores
 print("Mean score of %0.2f with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 ForestReg.fit(X_train, y_train)
 
@@ -130,6 +132,7 @@ lmTrainPredict = LinearReg.predict(X_train)
 
 print("-----------------------------------------------------------------")
 scores = cross_val_score(LinearReg, X_train, y_train,cv=10)
+scores_map['Linear Regression'] = scores
 print("Mean score of %0.2f with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 print("Accuracy of Linear regression algorithm for train Data ", LinearReg.score(X_train,y_train))
 print('Linear Regression train R^2:',metrics.r2_score(y_train, lmTrainPredict))
@@ -167,4 +170,9 @@ plt.scatter(lmTestPredict,y_test-lmTestPredict)
 plt.title("Predicted vs residuals")
 plt.xlabel("Predicted")
 plt.ylabel("Residuals")
+plt.show()
+
+plt.figure(figsize=(20, 10))
+scores_map = pd.DataFrame(scores_map)
+sns.boxplot(data=scores_map)
 plt.show()
