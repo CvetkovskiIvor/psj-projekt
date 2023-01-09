@@ -44,6 +44,7 @@ xg_reg = xgb.XGBRegressor(objective="reg:squarederror",
                           random_state=42)
 
 start_time = time.time()
+
 xg_reg.fit(X_train, y_train)
 
 xg_score = xg_reg.score(X_train, y_train)
@@ -71,6 +72,8 @@ plt.show()
 
 y_test_pred = xg_reg.predict(X_test)
 
+end_time = time.time()
+
 print("------------------")
 rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
 
@@ -79,7 +82,6 @@ plt.title("XGB test data: MEDV vs Predicted MEDV")
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.show()
-end_time = time.time()
 
 acc_xgb = metrics.r2_score(y_test, y_test_pred)
 print('R^2:', acc_xgb)
