@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import time
 
 from pandas import read_csv
 
@@ -139,6 +140,7 @@ param_distribs = {
         'degree': expon(scale=1.0),
     }
 
+
 #SVRegr =SVR(n_estimators=500, min_samples_leaf=1, max_features=0.5,bootstrap=False)
 SVRegr = SVR(C=211.49654965532167, epsilon=0.1, degree=0.04127375231664331, gamma=1.2401627989937203)
 #SVRegr = SVR()
@@ -146,8 +148,15 @@ SVRegr = SVR(C=211.49654965532167, epsilon=0.1, degree=0.04127375231664331, gamm
 
 #SVRegr_random.fit(X_train, y_train)
 #print(SVRegr_random.best_params_)
+
+#timer start
+
+t1 = time.time()
+
 # Training data
+scores_map = {}
 scores = cross_val_score(SVRegr, X_train, y_train, cv=10)
+scores_map['Support Vector Regression'] = scores
 print("Mean score of %0.2f with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 SVRegr.fit(X_train, y_train)
 #print(SVRegr.get_params(deep=True))
@@ -178,7 +187,13 @@ plt.show()
 print("---------------------------------------------------")
 #SupportVec.fit(X_test,y_test)
 test_predicted = SVRegr.predict(X_test)
-print("Accuracy of Random Forrest algorithm for test Data ", SVRegr.score(X_train,y_train))
+
+#kraj timera
+
+t2 = time.time()
+
+print("Accuracy of Support Vector algorithm for test Data ", SVRegr.score(X_train,y_train))
+print("Time of execution: ", t2 - t1,"secs")
 print('R^2 Test:',metrics.r2_score(y_test, test_predicted))
 print('Adjusted R^2:', 1 - (1-metrics.r2_score(y_test, test_predicted))*(len(y_test)-1)/(len(y_test)-X_test.shape[1]-1))
 print('MAE Test:',metrics.mean_absolute_error(y_test, test_predicted))
@@ -196,6 +211,8 @@ plt.title("Support Vector Reg Predicted vs residuals")
 plt.xlabel("Predicted")
 plt.ylabel("Residuals")
 plt.show()
+
+
 
 print('------------------------------------------------------')
 
@@ -247,4 +264,9 @@ plt.scatter(lmTestPredict,y_test-lmTestPredict)
 plt.title("Predicted vs residuals")
 plt.xlabel("Predicted")
 plt.ylabel("Residuals")
+plt.show()
+
+plt.figure(figsize=(20, 10))
+scores_map = pd.DataFrame(scores_map)
+sns.boxplot(data=scores_map)
 plt.show()
