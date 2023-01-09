@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import time
 
 from pandas import read_csv
 from sklearn.model_selection import train_test_split
@@ -42,8 +43,7 @@ xg_reg = xgb.XGBRegressor(objective="reg:squarederror",
                           alpha=6,
                           random_state=42)
 
-print(xg_reg)
-
+start_time = time.time()
 xg_reg.fit(X_train, y_train)
 
 xg_score = xg_reg.score(X_train, y_train)
@@ -69,12 +69,6 @@ plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.show()
 
-plt.scatter(y_pred,y_train-y_pred)
-plt.title("Predicted vs residuals")
-plt.xlabel("Predicted")
-plt.ylabel("Residuals")
-plt.show()
-
 y_test_pred = xg_reg.predict(X_test)
 
 print("------------------")
@@ -85,6 +79,7 @@ plt.title("XGB test data: MEDV vs Predicted MEDV")
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.show()
+end_time = time.time()
 
 acc_xgb = metrics.r2_score(y_test, y_test_pred)
 print('R^2:', acc_xgb)
@@ -113,4 +108,5 @@ scores_map = pd.DataFrame(scores)
 sns.boxplot(data=scores_map)
 plt.show()
 
+print("Execution time: ", end_time - start_time,"secs")
 # xg_reg.predict(X_test, iteration_range=310)
