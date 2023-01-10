@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import time
+
 
 from pandas import read_csv
 
@@ -66,12 +68,16 @@ ForestReg = RandomForestRegressor(n_estimators=470, min_samples_leaf=1, max_feat
 #ForestReg_random.fit(X_train,y_train)
 #print(ForestReg_random.best_params_)
 # Training data
+
+start_time = time.time()
+
+
+ForestReg.fit(X_train, y_train)
+
 scores_map = {}
 scores = cross_val_score(ForestReg, X_train, y_train,cv=10)
 scores_map['Random Forrest regressor'] = scores
 print("Mean score of %0.2f with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
-ForestReg.fit(X_train, y_train)
-
 
 
 train_predicted = ForestReg.predict(X_train)
@@ -95,6 +101,10 @@ plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.title("Random Forrest Training data: MEDV vs Predicted MEDV")
 plt.show()
+
+end_time = time.time()
+print("Execution time Random Forrest: ", end_time - start_time,"secs")
+
 
 
 # Test data
@@ -126,6 +136,9 @@ from sklearn.linear_model import LinearRegression
 
 LinearReg = LinearRegression()
 
+start_timeLin = time.time()
+
+
 LinearReg.fit(X_train,y_train)
 
 lmTrainPredict = LinearReg.predict(X_train)
@@ -147,6 +160,9 @@ plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.title("Linear Regression Train data: MEDV vs Predicted MEDV")
 plt.show()
+
+end_timeLin = time.time()
+print("Execution time Linear Regression: ", end_timeLin - start_timeLin,"secs")
 
 #Test data
 lmTestPredict = LinearReg.predict(X_test)
