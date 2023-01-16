@@ -9,6 +9,7 @@ Boston housing dataset
 ## Algoritmi za analizu
 David 
  - RandomForestRegressor
+ - Linear regression
 
 Entoni
  - SVR
