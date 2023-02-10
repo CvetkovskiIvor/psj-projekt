@@ -1,21 +1,12 @@
-def xgb():
+def xgb(data):
     import xgboost as xgb
-    import pandas as pd
     import numpy as np
     import matplotlib.pyplot as plt
-    import seaborn as sns
     import time
 
-    from pandas import read_csv
     from sklearn.model_selection import train_test_split
     from sklearn import metrics
     from sklearn.metrics import mean_squared_error
-    from sklearn.model_selection import cross_val_score
-    column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
-
-    data = read_csv(
-        '/home/ivor/Downloads/housing.xls',
-        header=None, delimiter=r"\s+", names=column_names)
 
     # Provjera da li postoje redovi bez vrijednosti
     print(data.isnull().sum())
@@ -46,13 +37,12 @@ def xgb():
     start_time = time.time()
 
     xg_reg.fit(X_train, y_train)
-
     xg_score = xg_reg.score(X_train, y_train)
 
     print("Training score: ", xg_score)
 
-    scores = cross_val_score(xg_reg, X_train, y_train, cv=10)
-    print("Mean cross-validation score: %.2f" % scores.mean())
+    #scores = cross_val_score(xg_reg, X_train, y_train, cv=10)
+    #print("Mean cross-validation score: %.2f" % scores.mean())
 
     # Model prediction on train data
     y_pred = xg_reg.predict(X_train)
@@ -83,18 +73,18 @@ def xgb():
     plt.ylabel("Predicted MEDV")
     plt.show()
 
-    acc_xgb = metrics.r2_score(y_test, y_test_pred)
-    print('R^2:', acc_xgb)
-    print('Adjusted R^2:',1 - (1-metrics.r2_score(y_test, y_test_pred))*(len(y_test)-1)/(len(y_test)-X_test.shape[1]-1))
+    print('R^2:', metrics.r2_score(y_test, y_test_pred))
+    print('Adjusted R^2:', 1 - (1-metrics.r2_score(y_test, y_test_pred))*(len(y_test)-1)/(len(y_test)-X_test.shape[1]-1))
     print('MAE:', metrics.mean_absolute_error(y_test, y_test_pred))
     print('MSE:', metrics.mean_squared_error(y_test, y_test_pred))
     print('RMSE:', np.sqrt(metrics.mean_squared_error(y_test, y_test_pred)))
 
     print("!!!!!!!!!!!!!!!!!!!!!")
-    xg_reg.fit(X_train, y_train, eval_set=[(X_train, y_train),(X_test, y_test)], early_stopping_rounds=20)
-    results = xg_reg.evals_result()
-    results.keys()
+    #xg_reg.fit(X_train, y_train, eval_set=[(X_train, y_train),(X_test, y_test)], early_stopping_rounds=20)
+    #results = xg_reg.evals_result()
+    #results.keys()
 
+    """
     plt.figure(figsize=(10, 7))
     plt.plot(results['validation_0']['rmse'], label="Training loss")
     plt.plot(results['validation_1']['rmse'], label="Validation loss")
@@ -109,6 +99,10 @@ def xgb():
     scores_map = pd.DataFrame(scores)
     sns.boxplot(data=scores_map)
     plt.show()
+    """
 
-    print("Execution time: ", end_time - start_time,"secs")
+    duration = end_time - start_time
+    print("Execution time: ", duration, "secs")
     # xg_reg.predict(X_test, iteration_range=310)
+
+    return y_test, y_test_pred, y_train, y_pred
