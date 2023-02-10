@@ -8,6 +8,7 @@ from pandas import read_csv
 
 column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
 
+
 data = read_csv(
     'C:\\Users\\Owner\\Desktop\\Skriptni\\psj-projekt\\Dataset\\housing.csv',
     header=None, delimiter=r"\s+", names=column_names)
