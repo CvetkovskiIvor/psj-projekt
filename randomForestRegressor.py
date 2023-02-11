@@ -1,4 +1,4 @@
-def randomForestRegressor():
+def randomForestRegressor(data):
 
 
     import numpy as np
@@ -6,39 +6,15 @@ def randomForestRegressor():
     import matplotlib.pyplot as plt
     import seaborn as sns
     import time
-
-    from pandas import read_csv
-
-    column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
-
-    #data = read_csv(
-    #    'C:\\Users\\User\\Documents\\Fakultet\\Programiranje skriptni jezici\\psj-projekt\\Dataset\\housing.csv',
-    #    header=None, delimiter=r"\s+", names=column_names)
-
-    data = read_csv(
-        '/home/ivor/Downloads/housing.xls',
-        header=None, delimiter=r"\s+", names=column_names)
-
-    # Provjera da li postoje redovi bez vrijednosti
-    print(data.isnull().sum())
-
-    print(data.describe())
-
-    # Prikaz korelacije između pojedinih varijabli sustava
-    correlation = data.corr().abs()
-    plt.figure(figsize=(20, 10))
-    sns.heatmap(correlation, annot=True)
-    plt.show()
-
     from sklearn.model_selection import train_test_split
     from sklearn import metrics
     from sklearn import preprocessing
+
 
     # Skalira  vrijednost i u jedan jedinstveni range
     min_max_scaler = preprocessing.MinMaxScaler()
     # Odabrani su stupci koji imaju najveću korelaciju sa traženim stupcom
     column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX', 'AGE', 'DIS']
-    # X = data.drop(['MEDV'], axis=1)
     X = data.loc[:, column_corr]
     X = min_max_scaler.fit_transform(X)
     # Tražena varijabla/stupac
@@ -133,5 +109,7 @@ def randomForestRegressor():
     plt.xlabel("Predicted")
     plt.ylabel("Residuals")
     plt.show()
+
+    return y_test, test_predicted, y_train, train_predicted
 
 

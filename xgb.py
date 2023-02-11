@@ -9,9 +9,9 @@ def xgb(data):
     from sklearn.metrics import mean_squared_error
 
     # Provjera da li postoje redovi bez vrijednosti
-    print(data.isnull().sum())
+    #print(data.isnull().sum())
 
-    print(data.describe())
+    #print(data.describe())
 
     # Odabrani su stupci koji imaju najveću korelaciju sa traženim stupcom
     column_corr = ['LSTAT', 'INDUS', 'NOX', 'PTRATIO', 'RM', 'TAX', 'AGE', 'DIS']

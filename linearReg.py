@@ -1,4 +1,4 @@
-def linearRegression():
+def linearRegression(data):
     import numpy as np
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -10,34 +10,8 @@ def linearRegression():
     from sklearn import preprocessing
     from sklearn.model_selection import cross_val_score
 
-    from pandas import read_csv
     from sklearn.linear_model import LinearRegression
 
-    column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT',
-                    'MEDV']
-
-    #data = read_csv(
-    #    'C:\\Users\\User\\Documents\\Fakultet\\Programiranje skriptni jezici\\psj-projekt\\Dataset\\housing.csv',
-    #    header=None, delimiter=r"\s+", names=column_names)
-
-    data = read_csv(
-        '/home/ivor/Downloads/housing.xls',
-        header=None, delimiter=r"\s+", names=column_names)
-
-    # Provjera da li postoje redovi bez vrijednosti
-    print(data.isnull().sum())
-
-    print(data.describe())
-
-    # Prikaz korelacije između pojedinih varijabli sustava
-    correlation = data.corr().abs()
-    plt.figure(figsize=(20, 10))
-    sns.heatmap(correlation, annot=True)
-    plt.show()
-
-    from sklearn.model_selection import train_test_split
-    from sklearn import metrics
-    from sklearn import preprocessing
 
     # Skalira  vrijednost i u jedan jedinstveni range
     min_max_scaler = preprocessing.MinMaxScaler()
@@ -108,7 +82,9 @@ def linearRegression():
     plt.ylabel("Residuals")
     plt.show()
 
-    plt.figure(figsize=(20, 10))
-    scores_map = pd.DataFrame(scores_map)
-    sns.boxplot(data=scores_map)
-    plt.show()
+    # plt.figure(figsize=(20, 10))
+    # scores_map = pd.DataFrame(scores_map)
+    # sns.boxplot(data=scores_map)
+    # plt.show()
+
+    return y_test, lmTestPredict, y_train, lmTrainPredict
