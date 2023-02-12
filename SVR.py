@@ -82,6 +82,7 @@ def svr(data):
 
     # kraj timera
     t2 = time.time()
+    duration = t2 - t1
 
     print("Accuracy of Support Vector algorithm for test Data ", SVRegr.score(X_train,y_train))
     print("Time of execution: ", t2 - t1,"secs")
@@ -111,4 +112,4 @@ def svr(data):
     sns.boxplot(data=scores_map)
     plt.show()
     """
-    return y_test, test_predicted, y_train, train_predicted
+    return y_test, test_predicted, y_train, train_predicted, scores, duration
