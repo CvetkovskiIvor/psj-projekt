@@ -1,6 +1,4 @@
 def randomForestRegressor(data):
-
-
     import numpy as np
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -104,12 +102,16 @@ def randomForestRegressor(data):
     plt.title("Random Forrest Test data: MEDV vs Predicted MEDV")
     plt.show()
 
+    """
     plt.scatter(test_predicted, y_test - test_predicted)
     plt.title("Random Forrest Reg Predicted vs residuals")
     plt.xlabel("Predicted")
     plt.ylabel("Residuals")
     plt.show()
+    """
 
-    return y_test, test_predicted, y_train, train_predicted
+    duration = end_time - start_time
+
+    return y_test, test_predicted, y_train, train_predicted, scores, duration
 
 

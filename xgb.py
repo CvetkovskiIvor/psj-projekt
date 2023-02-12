@@ -5,6 +5,7 @@ def xgb(data):
     import time
 
     from sklearn.model_selection import train_test_split
+    from sklearn.model_selection import cross_val_score
     from sklearn import metrics
     from sklearn.metrics import mean_squared_error
 
@@ -41,7 +42,7 @@ def xgb(data):
 
     print("Training score: ", xg_score)
 
-    #scores = cross_val_score(xg_reg, X_train, y_train, cv=10)
+    scores = cross_val_score(xg_reg, X_train, y_train, cv=10)
     #print("Mean cross-validation score: %.2f" % scores.mean())
 
     # Model prediction on train data
@@ -105,4 +106,4 @@ def xgb(data):
     print("Execution time: ", duration, "secs")
     # xg_reg.predict(X_test, iteration_range=310)
 
-    return y_test, y_test_pred, y_train, y_pred
+    return y_test, y_test_pred, y_train, y_pred, scores, duration

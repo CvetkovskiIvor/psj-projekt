@@ -76,15 +76,14 @@ def linearRegression(data):
     plt.title("Linear Regression TEST data: MEDV vs Predicted MEDV")
     plt.show()
 
+    """
     plt.scatter(lmTestPredict, y_test - lmTestPredict)
-    plt.title("Predicted vs residuals")
+    plt.title("Linear Regression Predicted vs residuals")
     plt.xlabel("Predicted")
     plt.ylabel("Residuals")
     plt.show()
+    """
 
-    # plt.figure(figsize=(20, 10))
-    # scores_map = pd.DataFrame(scores_map)
-    # sns.boxplot(data=scores_map)
-    # plt.show()
+    duration = end_timeLin - start_timeLin
 
-    return y_test, lmTestPredict, y_train, lmTrainPredict
+    return y_test, lmTestPredict, y_train, lmTrainPredict, scores, duration
