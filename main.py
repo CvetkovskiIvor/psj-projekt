@@ -16,7 +16,6 @@ data = read_csv(
         'C:\\Users\\User\\Documents\\Fakultet\\Programiranje skriptni jezici\\psj-projekt\\Dataset\\housing.csv',
         header=None, delimiter=r"\s+", names=column_names)
 
-
 # Provjera da li postoje redovi bez vrijednosti
 print(data.isnull().sum())
 
@@ -28,11 +27,9 @@ plt.figure(figsize=(20, 10))
 sns.heatmap(correlation, annot=True)
 plt.show()
 
-
 y_test_xgb, y_test_pred_xgb, y_train_xgb, y_pred_xgb = xgb(data)
 y_test_rfg, y_test_pred_rfg, y_train_rfg, y_pred_rfg =randomForestRegressor(data)
 y_test_lr, y_test_pred_lr, y_train_lr, y_pred_lr =linearRegression(data)
-
 
 # graficka usporedba algoritama na treniranju
 plt.scatter(y_train_xgb, y_pred_xgb)
