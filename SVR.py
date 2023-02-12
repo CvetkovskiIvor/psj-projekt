@@ -1,8 +1,6 @@
 def svr(data):
     import numpy as np
-    import pandas as pd
     import matplotlib.pyplot as plt
-    import seaborn as sns
     import time
 
     from sklearn.model_selection import train_test_split
@@ -11,9 +9,7 @@ def svr(data):
 
     # Provjera da li postoje redovi bez vrijednosti
     print(data.isnull().sum())
-
     print(data.describe())
-
 
     #Skalira  vrijednosti u jedan jedinstveni range
     min_max_scaler = preprocessing.MinMaxScaler()
@@ -34,33 +30,19 @@ def svr(data):
     print("Shape of y_train: ",y_train.shape)
     print("Shape of y_test",y_test.shape)
 
-
-    #Support Vector Regression
+    # Support Vector Regression
     from sklearn.svm import SVR
-    from sklearn.model_selection import RandomizedSearchCV
     from sklearn.model_selection import cross_val_score
-    from scipy.stats import expon, reciprocal
 
-    n_estimators = [int(x) for x in np.arange(start = 10, stop = 2000, step = 10)]
-    max_features = [0.5,'auto', 'sqrt','log2']
-    min_samples_leaf = [1, 2, 4]
-    bootstrap = [True, False]
-    param_distribs = {
-            'kernel': ['linear', 'rbf','poly','sigmoid'],
-            'C': reciprocal(20, 200000),
-            'gamma': expon(scale=1.0),
-            'degree': expon(scale=1.0),
-        }
-
-    #SVRegr =SVR(n_estimators=500, min_samples_leaf=1, max_features=0.5,bootstrap=False)
+    # SVRegr =SVR(n_estimators=500, min_samples_leaf=1, max_features=0.5,bootstrap=False)
     SVRegr = SVR(C=211.49654965532167, epsilon=0.1, degree=0.04127375231664331, gamma=1.2401627989937203)
-    #SVRegr = SVR()
-    #SVRegr_random = RandomizedSearchCV(estimator=SVRegr, param_distributions = param_distribs, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
+    # SVRegr = SVR()
+    # SVRegr_random = RandomizedSearchCV(estimator=SVRegr, param_distributions = param_distribs, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
 
-    #SVRegr_random.fit(X_train, y_train)
-    #print(SVRegr_random.best_params_)
+    # SVRegr_random.fit(X_train, y_train)
+    # print(SVRegr_random.best_params_)
 
-    #timer start
+    # timer start
     t1 = time.time()
 
     # Training data
@@ -69,7 +51,7 @@ def svr(data):
     scores_map['Support Vector Regression'] = scores
     print("Mean score of %0.2f with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
     SVRegr.fit(X_train, y_train)
-    #print(SVRegr.get_params(deep=True))
+    # print(SVRegr.get_params(deep=True))
 
     train_predicted = SVRegr.predict(X_train)
     print("Predicted MEDV: ", train_predicted)
@@ -82,7 +64,7 @@ def svr(data):
     # Prosjek kvadrata razlike između dobivenih vrijednosti i stvarnih vrijednosti
     print('MAE:',metrics.mean_absolute_error(y_train, train_predicted))
     # Što je manji MSE to je greška manja
-    #https://datagy.io/mean-squared-error-python/ - dodatno objašnjenje
+    # https://datagy.io/mean-squared-error-python/ - dodatno objašnjenje
     print('MSE:',metrics.mean_squared_error(y_train, train_predicted))
     # https://www.kaggle.com/general/215997 - Objašnjenje za RMSE grešku
     print('RMSE:',np.sqrt(metrics.mean_squared_error(y_train, train_predicted)))
@@ -95,10 +77,10 @@ def svr(data):
 
     # Test data
     print("---------------------------------------------------")
-    #SupportVec.fit(X_test,y_test)
+    # SupportVec.fit(X_test,y_test)
     test_predicted = SVRegr.predict(X_test)
 
-    #kraj timera
+    # kraj timera
     t2 = time.time()
 
     print("Accuracy of Support Vector algorithm for test Data ", SVRegr.score(X_train,y_train))

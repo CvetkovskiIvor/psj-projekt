@@ -33,8 +33,9 @@ y_test_lr, y_test_pred_lr, y_train_lr, y_pred_lr =linearRegression(data)
 
 # graficka usporedba algoritama na treniranju
 plt.scatter(y_train_xgb, y_pred_xgb)
-plt.scatter(y_train_rfg, y_pred_rfg)  # TODO zamijeniti plotanjem drugih algoritama
+plt.scatter(y_train_rfg, y_pred_rfg)
 plt.scatter(y_train_lr, y_pred_lr)
+# TODO zamijeniti plotanjem drugih algoritama
 plt.title("Training data comparison")
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
