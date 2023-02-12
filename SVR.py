@@ -92,13 +92,14 @@ def svr(data):
     print('MSE Test:',metrics.mean_squared_error(y_test, test_predicted))
     print('RMSE Test:',np.sqrt(metrics.mean_squared_error(y_test, test_predicted)))
 
-    """
+    
     plt.scatter(y_test, test_predicted)
     plt.xlabel("MEDV")
     plt.ylabel("Predicted MEDV")
     plt.title("Support Vector Test data: MEDV vs Predicted MEDV")
     plt.show()
 
+    """
     plt.scatter(test_predicted,y_test-test_predicted)
     plt.title("Support Vector Reg Predicted vs residuals")
     plt.xlabel("Predicted")
