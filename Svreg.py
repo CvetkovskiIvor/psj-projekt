@@ -1,4 +1,4 @@
-def svr(data):
+def svr1(data):
     import numpy as np
     import matplotlib.pyplot as plt
     import time
