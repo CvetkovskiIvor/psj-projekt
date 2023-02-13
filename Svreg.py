@@ -35,7 +35,7 @@ def svr1(data):
     from sklearn.model_selection import cross_val_score
 
     # SVRegr =SVR(n_estimators=500, min_samples_leaf=1, max_features=0.5,bootstrap=False)
-    SVRegr = SVR(C=211.49654965532167, epsilon=0.1, degree=0.04127375231664331, gamma=1.2401627989937203)
+    SVRegr = SVR(C=211.49654965532167, epsilon=0.1, gamma=1.2401627989937203)
     # SVRegr = SVR()
     # SVRegr_random = RandomizedSearchCV(estimator=SVRegr, param_distributions = param_distribs, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
 
