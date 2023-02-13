@@ -1,6 +1,7 @@
 from randomForestRegressor import randomForestRegressor
 from linearReg import linearRegression
 from xgb import xgb
+from Svreg import svr1
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -32,13 +33,15 @@ plt.show()
 y_test_xgb, y_test_pred_xgb, y_train_xgb, y_pred_xgb, scores_xgb, duration_xgb = xgb(data)
 y_test_rfg, y_test_pred_rfg, y_train_rfg, y_pred_rfg, scores_rfg, duration_rfg = randomForestRegressor(data)
 y_test_lr, y_test_pred_lr, y_train_lr, y_pred_lr, scores_lr, duration_lr = linearRegression(data)
+y_test_svr, y_test_pred_svr, y_train_svr, y_pred_svr, scores_svr, duration_svr = svr(data)
 
 # pohrana vrijednosti preciznosti algoritama u data frame
 scores_map = {}
 scores_map['Linear Regression'] = scores_lr
 scores_map['RFG'] = scores_rfg
 scores_map['XGB'] = scores_xgb
-
+scores_map['SVR'] = scores_svr
+ 
 # graficka usporedba preciznosti
 scores_map = pd.DataFrame(scores_map)
 sns.boxplot(data=scores_map)
@@ -49,6 +52,7 @@ plt.show()
 plt.scatter(y_train_xgb, y_pred_xgb, label='XGB')
 plt.scatter(y_train_rfg, y_pred_rfg, label='Random Forrest Regressor')
 plt.scatter(y_train_lr, y_pred_lr, label='Linear regression')
+plt.scatter(y_train_svr, y_pred_svr, label='SVR')
 # TODO zamijeniti plotanjem drugih algoritama
 plt.title("Training data comparison")
 plt.xlabel("MEDV")
@@ -60,6 +64,7 @@ plt.show()
 plt.scatter(y_test_xgb, y_test_pred_xgb, label='XGB')
 plt.scatter(y_test_rfg, y_test_pred_rfg, label='Random Forrest Regressor')
 plt.scatter(y_test_lr, y_test_pred_lr, label='Linear regression')
+plt.scatter(y_test_svr, y_test_pred_svr, label='SVR')
 # TODO zamijeniti plotanjem drugih algoritama
 plt.title("Testing data comparison")
 plt.xlabel("MEDV")
@@ -67,10 +72,10 @@ plt.ylabel("Predicted MEDV")
 plt.legend()
 plt.show()
 
-plt.bar(['linear regression', 'random forrest regressor', 'XGB'], [duration_lr, duration_rfg, duration_xgb])
+plt.bar(['linear regression', 'random forrest regressor', 'XGB', 'SVR'], [duration_lr, duration_rfg, duration_xgb, duration_svr])
 plt.title("Execution time comparison")
 plt.ylabel("Time in seconds")
 plt.show()
 
-print(duration_lr, duration_rfg, duration_xgb)
+print(duration_lr, duration_rfg, duration_xgb, duration_svr)
 print("finished executing code")
