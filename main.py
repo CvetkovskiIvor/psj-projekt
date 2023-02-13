@@ -33,7 +33,7 @@ plt.show()
 y_test_xgb, y_test_pred_xgb, y_train_xgb, y_pred_xgb, scores_xgb, duration_xgb = xgb(data)
 y_test_rfg, y_test_pred_rfg, y_train_rfg, y_pred_rfg, scores_rfg, duration_rfg = randomForestRegressor(data)
 y_test_lr, y_test_pred_lr, y_train_lr, y_pred_lr, scores_lr, duration_lr = linearRegression(data)
-y_test_svr, y_test_pred_svr, y_train_svr, y_pred_svr, scores_svr, duration_svr = svr(data)
+y_test_svr, y_test_pred_svr, y_train_svr, y_pred_svr, scores_svr, duration_svr = svr1(data)
 
 # pohrana vrijednosti preciznosti algoritama u data frame
 scores_map = {}
