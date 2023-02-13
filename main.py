@@ -1,7 +1,7 @@
 from randomForestRegressor import randomForestRegressor
 from linearReg import linearRegression
 from xgb import xgb
-from SVR import svr
+from Svreg import svr1
 
 import matplotlib.pyplot as plt
 import pandas as pd
