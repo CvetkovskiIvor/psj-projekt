@@ -76,14 +76,6 @@ def linearRegression(data):
     plt.title("Linear Regression TEST data: MEDV vs Predicted MEDV")
     plt.show()
 
-    """
-    plt.scatter(lmTestPredict, y_test - lmTestPredict)
-    plt.title("Linear Regression Predicted vs residuals")
-    plt.xlabel("Predicted")
-    plt.ylabel("Residuals")
-    plt.show()
-    """
-
     duration = end_timeLin - start_timeLin
 
     return y_test, lmTestPredict, y_train, lmTrainPredict, scores, duration

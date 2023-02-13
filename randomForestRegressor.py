@@ -36,13 +36,14 @@ def randomForestRegressor(data):
     max_features = [0.5, 'auto', 'sqrt', 'log2']
     min_samples_leaf = [1, 2, 4]
     bootstrap = [True, False]
-    random_grid = {'n_estimators': n_estimators,
-                   'max_features': max_features,
-                   'min_samples_leaf': min_samples_leaf,
-                   'bootstrap': bootstrap}
+    #random_grid = {'n_estimators': n_estimators,
+    #               'max_features': max_features,
+    #               'min_samples_leaf': min_samples_leaf,
+    #               'bootstrap': bootstrap}
 
-    # ForestReg =RandomForestRegressor(n_estimators=500, min_samples_leaf=1, max_features=0.5,bootstrap=False)
     ForestReg = RandomForestRegressor(n_estimators=470, min_samples_leaf=1, max_features='sqrt', bootstrap=False)
+
+    #Funkcija za traženje najboljih parametara
     # ForestReg_random = RandomizedSearchCV(estimator = ForestReg, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
 
     # ForestReg_random.fit(X_train,y_train)
@@ -63,16 +64,13 @@ def randomForestRegressor(data):
     # Provjera ispravnosti algoritma
     print("Accuracy of Random Forrest algorithm ", ForestReg.score(X_train, y_train))
     # Računa koliko varijacije u dobivenom rezultatu se može predvidjeti na temelju ulazne varijable
-    # Što je broj bliže 1 to je algoritam točniji
     print('R^2:', metrics.r2_score(y_train, train_predicted))
     print('Adjusted R^2:',
           1 - (1 - metrics.r2_score(y_train, train_predicted)) * (len(y_train) - 1) / (len(y_train) - X_train.shape[1] - 1))
     # Prosjek kvadrata razlike između dobivenih vrijednosti i stvarnih vrijednosti
     print('MAE:', metrics.mean_absolute_error(y_train, train_predicted))
     # Što je manji MSE to je greška manja
-    # https://datagy.io/mean-squared-error-python/ - dodatno objašnjenje
     print('MSE:', metrics.mean_squared_error(y_train, train_predicted))
-    # https://www.kaggle.com/general/215997 - Objašnjenje za RMSE grešku
     print('RMSE:', np.sqrt(metrics.mean_squared_error(y_train, train_predicted)))
 
     plt.scatter(y_train, train_predicted)
@@ -101,14 +99,6 @@ def randomForestRegressor(data):
     plt.ylabel("Predicted MEDV")
     plt.title("Random Forrest Test data: MEDV vs Predicted MEDV")
     plt.show()
-
-    """
-    plt.scatter(test_predicted, y_test - test_predicted)
-    plt.title("Random Forrest Reg Predicted vs residuals")
-    plt.xlabel("Predicted")
-    plt.ylabel("Residuals")
-    plt.show()
-    """
 
     duration = end_time - start_time
 

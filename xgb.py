@@ -85,23 +85,6 @@ def xgb(data):
     #results = xg_reg.evals_result()
     #results.keys()
 
-    """
-    plt.figure(figsize=(10, 7))
-    plt.plot(results['validation_0']['rmse'], label="Training loss")
-    plt.plot(results['validation_1']['rmse'], label="Validation loss")
-    plt.axvline(x=xg_reg.best_ntree_limit, ymin=0, ymax=14, color='gray',
-                label="Optimal tree number")
-    plt.xlabel("Number of Tree")
-    plt.ylabel("Loss")
-    plt.legend(loc='upper right')
-    plt.show()
-
-    plt.figure(figsize=(20, 10))
-    scores_map = pd.DataFrame(scores)
-    sns.boxplot(data=scores_map)
-    plt.show()
-    """
-
     duration = end_time - start_time
     print("Execution time: ", duration, "secs")
     # xg_reg.predict(X_test, iteration_range=310)

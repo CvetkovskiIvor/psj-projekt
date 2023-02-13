@@ -57,16 +57,10 @@ def svr1(data):
     print("Predicted MEDV: ", train_predicted)
     # Provjera ispravnosti algoritma
     print("Accuracy of Support Vector algorithm ", SVRegr.score(X_train,y_train))
-    # Računa koliko varijacije u dobivenom rezultatu se može predvidjeti na temelju ulazne varijable
-    # Što je broj bliže 1 to je algoritam točniji
     print('R^2:',metrics.r2_score(y_train, train_predicted))
     print('Adjusted R^2:',1 - (1-metrics.r2_score(y_train, train_predicted))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1))
-    # Prosjek kvadrata razlike između dobivenih vrijednosti i stvarnih vrijednosti
     print('MAE:',metrics.mean_absolute_error(y_train, train_predicted))
-    # Što je manji MSE to je greška manja
-    # https://datagy.io/mean-squared-error-python/ - dodatno objašnjenje
     print('MSE:',metrics.mean_squared_error(y_train, train_predicted))
-    # https://www.kaggle.com/general/215997 - Objašnjenje za RMSE grešku
     print('RMSE:',np.sqrt(metrics.mean_squared_error(y_train, train_predicted)))
 
     plt.scatter(y_train, train_predicted)
@@ -97,19 +91,5 @@ def svr1(data):
     plt.ylabel("Predicted MEDV")
     plt.title("Support Vector Test data: MEDV vs Predicted MEDV")
     plt.show()
-    
-    """
-    plt.scatter(test_predicted,y_test-test_predicted)
-    plt.title("Support Vector Reg Predicted vs residuals")
-    plt.xlabel("Predicted")
-    plt.ylabel("Residuals")
-    plt.show()
 
-    print('------------------------------------------------------')
-
-    plt.figure(figsize=(20, 10))
-    scores_map = pd.DataFrame(scores_map)
-    sns.boxplot(data=scores_map)
-    plt.show()
-    """
     return y_test, test_predicted, y_train, train_predicted, scores, duration

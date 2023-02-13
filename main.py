@@ -11,13 +11,13 @@ from pandas import read_csv
 
 column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
 
-data = read_csv(
-       '/home/ivor/Downloads/housing.xls',
-       header=None, delimiter=r"\s+", names=column_names)
+#data = read_csv(
+#       '/home/ivor/Downloads/housing.xls',
+#       header=None, delimiter=r"\s+", names=column_names)
 
-# data = read_csv(
-#        'C:\\Users\\User\\Documents\\Fakultet\\Programiranje skriptni jezici\\psj-projekt\\Dataset\\housing.csv',
-#        header=None, delimiter=r"\s+", names=column_names)
+data = read_csv(
+        'C:\\Users\\User\\Documents\\Fakultet\\Programiranje skriptni jezici\\psj-projekt\\Dataset\\housing.csv',
+        header=None, delimiter=r"\s+", names=column_names)
 
 # Provjera da li postoje redovi bez vrijednosti
 print(data.isnull().sum())
@@ -53,7 +53,6 @@ plt.scatter(y_train_xgb, y_pred_xgb, label='XGB')
 plt.scatter(y_train_rfg, y_pred_rfg, label='Random Forrest Regressor')
 plt.scatter(y_train_lr, y_pred_lr, label='Linear regression')
 plt.scatter(y_train_svr, y_pred_svr, label='SVR')
-# TODO zamijeniti plotanjem drugih algoritama
 plt.title("Training data comparison")
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
@@ -65,14 +64,13 @@ plt.scatter(y_test_xgb, y_test_pred_xgb, label='XGB')
 plt.scatter(y_test_rfg, y_test_pred_rfg, label='Random Forrest Regressor')
 plt.scatter(y_test_lr, y_test_pred_lr, label='Linear regression')
 plt.scatter(y_test_svr, y_test_pred_svr, label='SVR')
-# TODO zamijeniti plotanjem drugih algoritama
 plt.title("Testing data comparison")
 plt.xlabel("MEDV")
 plt.ylabel("Predicted MEDV")
 plt.legend()
 plt.show()
 
-plt.bar(['linear regression', 'random forrest regressor', 'XGB', 'SVR'], [duration_lr, duration_rfg, duration_xgb, duration_svr])
+plt.bar(['Linear regression','SVR', 'XGB', 'Random Forrest Regressor'], [duration_lr, duration_svr, duration_xgb, duration_rfg])
 plt.title("Execution time comparison")
 plt.ylabel("Time in seconds")
 plt.show()
